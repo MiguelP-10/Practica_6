@@ -88,8 +88,24 @@ public class Calculadora implements ActionListener {
 //}
 
     private void Operar() {
-        b = Double.parseDouble(t.getText());
 
+        b = Double.parseDouble(t.getText());
+        if(operador==1){
+            this.resultado = a+b;
+            t.setText(String.valueOf(resultado));
+        }
+        else if(operador==2){
+            this.resultado = a-b;
+            t.setText(String.valueOf(resultado));
+        }
+        else if(operador ==3){
+            this.resultado = a*b;
+            t.setText(String.valueOf(resultado));
+        }
+        else if(operador==4){
+            this.resultado = a/b;
+            t.setText(String.valueOf(resultado));
+        }
         // REALIZAR LA OPERACIÓN OPORTUNA EN FUNCIÓN DEL VALOR DE LA VARIABLE operador
         // Y MOSTRAR EL VALOR DE LA VARIABLE EN LA CAJA DE TEXTO
 
@@ -104,55 +120,76 @@ public class Calculadora implements ActionListener {
             t.setText(textoaux);
         }
         if(e.getActionCommand()=="Clear"){
-
+            a=0;
+            b=0;
+            operador = 0;
+            t.setText(null);
         }
 
         if(e.getActionCommand()=="0"){
             t.setText(t.getText() + "0");
-            if(operador==0){
-                this.a= 0;
-            }
-            else this.b =0;
         }
-        if(e.getActionCommand()=="1"){
+        if(e.getActionCommand()=="1") {
             t.setText(t.getText() + "1");
-            if(operador==0){
-                this.a= 1;
-            }
-            else this.b =1;
         }
         if(e.getActionCommand()=="2"){
-            t.setText("2");
+            t.setText(t.getText()+"2");
         }
         if(e.getActionCommand()=="3"){
-            t.setText("3");
+            t.setText(t.getText()+"3");;
         }
         if(e.getActionCommand()=="4"){
-            t.setText("4");
+            t.setText(t.getText()+"4");
         }
         if(e.getActionCommand()=="5"){
-            t.setText("5");
+            t.setText(t.getText()+ "5");
         }
         if(e.getActionCommand()=="6"){
-            t.setText("6");
+            t.setText(t.getText()+"6");
+
         }
         if(e.getActionCommand()=="7"){
-            t.setText("7");
+            t.setText(t.getText()+"7");
+
         }
         if(e.getActionCommand()=="8"){
-            t.setText("8");
+            t.setText(t.getText()+"8");
+
         }
         if(e.getActionCommand()=="9"){
-            t.setText("9");
+            t.setText(t.getText()+"9");
+
         }
         if(e.getActionCommand()=="+"){
-            t.setText(t.getText()+"+");
-
+            a = Double.parseDouble(t.getText());
+            t.setText(null);
+            this.operador = 1;
         }
+        if(e.getActionCommand()=="-"){
+            a = Double.parseDouble(t.getText());
+            t.setText(null);
+            this.operador = 2;
+        }
+        if(e.getActionCommand()=="*"){
+            a = Double.parseDouble(t.getText());
+            t.setText(null);
+            this.operador = 3;
+        }
+        if(e.getActionCommand()=="/"){
+            a = Double.parseDouble(t.getText());
+            t.setText(null);
+            this.operador = 4;
+        }
+        if(e.getActionCommand()=="="){
+            this.Operar();
+        }
+    }
 
+    public void actionPerformed(KeyEvent e) {
 
     }
 }
+
 
 // APARTADO 2. HACER QUE CUANDO SE PULSE LA TECLA Intro SE REALICE EL CÁLCULO USANDO LA INTERFACE KeyListener
 
