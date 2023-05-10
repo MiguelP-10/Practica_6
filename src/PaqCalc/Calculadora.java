@@ -6,7 +6,7 @@ import java.awt.event.*;
 
 // MANEJO DE EVENTOS EN UNA GUI EN JAVA.
 
-public class Calculadora implements ActionListener {
+public class Calculadora implements KeyListener, ActionListener {
 
     private final JTextField t=new JTextField();
     private final JButton[] botones={new JButton("1"),new JButton("2"),new JButton("3"),new JButton("4"),
@@ -24,12 +24,12 @@ public class Calculadora implements ActionListener {
 
     public Calculadora() {
 
-        a=b=resultado=operador=0;
+        a = b = resultado = operador = 0;
 
         JFrame f = new JFrame("Calculadora");
         t.setBounds(30, 40, 280, 30);
         f.add(t);
-        int indice=0;
+        int indice = 0;
         for (int x = 40; x <= 250; x = x + 70) {
             for (int y = 100; y <= 310; y = y + 70) {
                 botones[indice].setBounds(x, y, 50, 40);
@@ -56,15 +56,15 @@ public class Calculadora implements ActionListener {
         bclr.addActionListener(this);
         bdel.addActionListener(this);
 
-        for(int i=0;i< botones.length;i++){
+        for (int i = 0; i < botones.length; i++) {
             botones[i].addActionListener(this);
         }
 
-    }
+
 // APARTADO 1. HACER QUE EL PROGRAMA RESPONDA ANTE TODOS LOS POSIBLES EVENTOS PROVOCADOS POR
 // EL RATÓN EN EL MANEJO DE LA CALCULADORA
 
-    // NOMBRE DE MÉTODO ADECUADO PARA PROCESAR LOS EVENTOS {
+        // NOMBRE DE MÉTODO ADECUADO PARA PROCESAR LOS EVENTOS {
 
        /*
           1. COMPONER EL NÚMERO PARA QUE APAREZCA EN LA CAJA DE TEXTO
@@ -82,10 +82,11 @@ public class Calculadora implements ActionListener {
 
         */
 
-    //t.requestFocus(); // Sitúo el foco de nuevo en la caja de texto.
+
+        t.requestFocus(); // Sitúo el foco de nuevo en la caja de texto.
+    }
 
 
-//}
 
     private void Operar() {
 
@@ -185,7 +186,20 @@ public class Calculadora implements ActionListener {
         }
     }
 
-    public void actionPerformed(KeyEvent e) {
+    @Override
+    public void keyTyped(KeyEvent e) {
+
+    }
+
+    @Override
+    public void keyPressed(KeyEvent e) {
+        if(e.getKeyCode() == KeyEvent.VK_ENTER){
+            this.Operar();
+        }
+    }
+
+    @Override
+    public void keyReleased(KeyEvent e) {
 
     }
 }
