@@ -1,12 +1,14 @@
 package PaqCalc;
 
+import misExcepciones.Exceptionresultadoindefinido;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
 // MANEJO DE EVENTOS EN UNA GUI EN JAVA.
 
-public class Calculadora implements KeyListener, ActionListener {
+public class Calculadora implements KeyListener, ActionListener  {
 
     private final JTextField t=new JTextField();
     private final JButton[] botones={new JButton("1"),new JButton("2"),new JButton("3"),new JButton("4"),
@@ -20,6 +22,8 @@ public class Calculadora implements KeyListener, ActionListener {
     private double b;
     private double resultado;
     private int operador;
+
+
 
 
     public Calculadora() {
@@ -44,6 +48,7 @@ public class Calculadora implements KeyListener, ActionListener {
         f.add(bclr);
 
 
+
         f.setLayout(null);
         f.setVisible(true);
         f.setSize(350, 500);
@@ -59,6 +64,11 @@ public class Calculadora implements KeyListener, ActionListener {
         for (int i = 0; i < botones.length; i++) {
             botones[i].addActionListener(this);
         }
+
+
+
+
+        t.addKeyListener(this);
 
 
 // APARTADO 1. HACER QUE EL PROGRAMA RESPONDA ANTE TODOS LOS POSIBLES EVENTOS PROVOCADOS POR
@@ -83,12 +93,11 @@ public class Calculadora implements KeyListener, ActionListener {
         */
 
 
-        t.requestFocus(); // Sitúo el foco de nuevo en la caja de texto.
     }
 
 
 
-    private void Operar() {
+    private void Operar() throws  Exceptionresultadoindefinido{
 
         b = Double.parseDouble(t.getText());
         if(operador==1){
@@ -107,6 +116,9 @@ public class Calculadora implements KeyListener, ActionListener {
             this.resultado = a/b;
             t.setText(String.valueOf(resultado));
         }
+        else if (Double.isNaN(resultado)) {
+            throw new Exceptionresultadoindefinido();
+        }
         // REALIZAR LA OPERACIÓN OPORTUNA EN FUNCIÓN DEL VALOR DE LA VARIABLE operador
         // Y MOSTRAR EL VALOR DE LA VARIABLE EN LA CAJA DE TEXTO
 
@@ -115,10 +127,13 @@ public class Calculadora implements KeyListener, ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
 
+
         if(e.getActionCommand()=="Delete"){
-            String textoactual = t.getText();
-            String textoaux = textoactual.substring(0, Integer.parseInt(textoactual));
-            t.setText(textoaux);
+            String texto = t.getText();
+            if (texto.length() > 0) {
+                texto = texto.substring(0, texto.length() - 1);
+                t.setText(texto);
+            }
         }
         if(e.getActionCommand()=="Clear"){
             a=0;
@@ -182,8 +197,15 @@ public class Calculadora implements KeyListener, ActionListener {
             this.operador = 4;
         }
         if(e.getActionCommand()=="="){
-            this.Operar();
+            try {
+                this.Operar();
+            } catch (Exceptionresultadoindefinido ex) {
+                throw new RuntimeException(ex);
+            }
         }
+
+        t.requestFocus(); // Sitúo el foco de nuevo en la caja de texto.
+
     }
 
     @Override
@@ -194,7 +216,11 @@ public class Calculadora implements KeyListener, ActionListener {
     @Override
     public void keyPressed(KeyEvent e) {
         if(e.getKeyCode() == KeyEvent.VK_ENTER){
-            this.Operar();
+            try {
+                this.Operar();
+            } catch (Exceptionresultadoindefinido ex) {
+                throw new RuntimeException(ex);
+            }
         }
     }
 
