@@ -1,5 +1,7 @@
 package PaqCalc;
 
+import misExcepciones.ExceptionCajaVacia;
+import misExcepciones.ExceptionNoNumero;
 import misExcepciones.Exceptionresultadoindefinido;
 
 import javax.swing.*;
@@ -18,10 +20,14 @@ public class Calculadora implements KeyListener, ActionListener  {
     };
     private final JButton bdel=new JButton("Delete");
     private final JButton bclr=new JButton("Clear");
+    private final JCheckBox Pi = new JCheckBox("Mas Operaciones");
     private double a;
     private double b;
     private double resultado;
     private int operador;
+
+    JButton PI = new JButton("PI");
+    JButton Coseno = new JButton("Coseno");
 
 
 
@@ -31,33 +37,40 @@ public class Calculadora implements KeyListener, ActionListener  {
         a = b = resultado = operador = 0;
 
         JFrame f = new JFrame("Calculadora");
-        t.setBounds(30, 40, 280, 30);
+        t.setBounds(30, 40, 320, 30);
         f.add(t);
         int indice = 0;
-        for (int x = 40; x <= 250; x = x + 70) {
-            for (int y = 100; y <= 310; y = y + 70) {
+        for (int x = 40; x <= 300; x = x + 86) {
+            for (int y = 100; y <= 360; y = y + 70) {
                 botones[indice].setBounds(x, y, 50, 40);
                 f.add(botones[indice]);
                 indice++;
             }
         }
 
-        bdel.setBounds(60, 380, 100, 40);
-        bclr.setBounds(180, 380, 100, 40);
+        bdel.setBounds(40, 380, 100, 40);
+        bclr.setBounds(250, 380, 100, 40);
+        Pi.setBounds(140,420,100,40);
+        PI.setBounds(40, 380, 0, 0);
+        Coseno.setBounds(250, 420, 0, 0);
         f.add(bdel);
         f.add(bclr);
+        f.add(Pi);
+        f.add(PI);
+        f.add(Coseno);
 
 
 
         f.setLayout(null);
         f.setVisible(true);
-        f.setSize(350, 500);
+        f.setSize(400, 520);
         f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE); //Por defecto se usa HIDE_ON_CLOSE y el programa sigue activo en memoria
         f.setResizable(false);
         Image icon = Toolkit.getDefaultToolkit().getImage("icon.png");
         f.setIconImage(icon);
         f.setLocationRelativeTo(null); //se posiciona en el centro de la pantalla
 
+        Pi.addActionListener(this);
         bclr.addActionListener(this);
         bdel.addActionListener(this);
 
@@ -97,7 +110,7 @@ public class Calculadora implements KeyListener, ActionListener  {
 
 
 
-    private void Operar() throws  Exceptionresultadoindefinido{
+    private void Operar() throws  Exceptionresultadoindefinido, ExceptionNoNumero{
 
         b = Double.parseDouble(t.getText());
         if(operador==1){
@@ -119,13 +132,16 @@ public class Calculadora implements KeyListener, ActionListener  {
         else if (Double.isNaN(resultado)) {
             throw new Exceptionresultadoindefinido();
         }
+        else if (b != 0 || b != 1  || b != 2 || b != 3 || b != 4 || b != 5 || b != 6 || b != 7 || b != 8 || b != 9) {
+            throw new ExceptionNoNumero();
+        }
         // REALIZAR LA OPERACIÓN OPORTUNA EN FUNCIÓN DEL VALOR DE LA VARIABLE operador
         // Y MOSTRAR EL VALOR DE LA VARIABLE EN LA CAJA DE TEXTO
 
     }
 
     @Override
-    public void actionPerformed(ActionEvent e) {
+    public void actionPerformed(ActionEvent e){
 
 
         if(e.getActionCommand()=="Delete"){
@@ -133,6 +149,9 @@ public class Calculadora implements KeyListener, ActionListener  {
             if (texto.length() > 0) {
                 texto = texto.substring(0, texto.length() - 1);
                 t.setText(texto);
+            }
+            else if(texto==null){
+
             }
         }
         if(e.getActionCommand()=="Clear"){
@@ -183,8 +202,14 @@ public class Calculadora implements KeyListener, ActionListener  {
         }
         if(e.getActionCommand()=="-"){
             a = Double.parseDouble(t.getText());
-            t.setText(null);
-            this.operador = 2;
+            if(a != 0 || a != 1  || a != 2 || a != 3 || a != 4 || a != 5 || a != 6 || a != 7 || a != 8 || a != 9){
+                //throw new ExceptionNoNumero();
+            }
+            else{
+                t.setText(null);
+                this.operador = 2;
+            }
+
         }
         if(e.getActionCommand()=="*"){
             a = Double.parseDouble(t.getText());
@@ -196,13 +221,25 @@ public class Calculadora implements KeyListener, ActionListener  {
             t.setText(null);
             this.operador = 4;
         }
-        if(e.getActionCommand()=="="){
+        if(e.getActionCommand()=="=") {
             try {
                 this.Operar();
             } catch (Exceptionresultadoindefinido ex) {
                 throw new RuntimeException(ex);
+            } catch (ExceptionNoNumero ex) {
+                throw new RuntimeException(ex);
             }
         }
+
+            if(Pi.isSelected()){
+                PI.setBounds(40, 420, 100, 40);
+                Coseno.setBounds(250, 420, 100, 40);
+            }
+            if(!Pi.isSelected()){
+                PI.setBounds(40, 420, 0, 0);
+                Coseno.setBounds(250, 420, 0, 0);
+            }
+
 
         t.requestFocus(); // Sitúo el foco de nuevo en la caja de texto.
 
@@ -219,6 +256,8 @@ public class Calculadora implements KeyListener, ActionListener  {
             try {
                 this.Operar();
             } catch (Exceptionresultadoindefinido ex) {
+                throw new RuntimeException(ex);
+            } catch (ExceptionNoNumero ex) {
                 throw new RuntimeException(ex);
             }
         }
